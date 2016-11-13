@@ -7,7 +7,7 @@ SECTION "Input methods", ROM0
 
 UpdateGame::
 	call GetInputs
-	ld B, C
+	ld B, A
 
 	; load DE = speed
 	ld A, [BusVelHi]
@@ -21,13 +21,24 @@ UpdateGame::
 	LongAdd D,E, 0,BusAccel, D,E ; DE += BusAccel
 .noAccel
 
+	; are we offroad?
+	ld A, [BusYPos]
+	; offroad is defined as the bus center line (YPos+8) being above the edge (4*8=32)
+	; or the wheels (YPos+12) being below the edge (14*8=112).
+	; This translates to a YPos range of 24 < y <= 100
+	sub 24
+	jr c, .offroad
+	cp 100-24 ; set carry if original value > 100
+	jr c, .notOffroad
+.offroad
+	LongSub D,E, 0,BusDragOffroad, D,E ; DE -= BusDragOffroad
+	jp c, Crash ; on underflow, it means we're speed 0 and offroad, ie crashed.
+	; Note we do a tail call ret elision here, the above line is a "call & ret".
+.notOffroad
+
 	; road drag
 	LongSub D,E, 0,BusDrag, D,E ; DE -= BusDrag
 	jr c, .zeroSpeed ; on underflow, stop dragging and set zero
-
-	; are we offroad?
-	; TODO
-.notOffroad
 
 	; check speed upper bound
 	ld A, BusTopSpeedHi
@@ -136,7 +147,10 @@ GetInputs::
 
 	ld A, [HL]
 	and $0f
-	or C
-	ld C, A ; or together the two halves
+	or C ; or together the two halves
 
 	ret
+
+
+Crash::
+	jp HaltForever ; stub for now
