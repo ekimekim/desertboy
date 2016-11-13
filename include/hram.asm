@@ -14,6 +14,6 @@ BusYPos EQU $ff85
 BusVelHi EQU $ff86
 BusVelLo EQU $ff87
 
-; Used to determine when BusYPos should change due to drift
+; 16-bit sub-pixel value for BusYPos
 BusYSubPosHi EQU $ff88
 BusYSubPosLo EQU $ff89

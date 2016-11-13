@@ -7,7 +7,7 @@ SECTION "Input methods", ROM0
 
 UpdateGame::
 	call GetInputs
-	ld C, A
+	ld B, C
 
 	; load DE = speed
 	ld A, [BusVelHi]
@@ -15,7 +15,7 @@ UpdateGame::
 	ld A, [BusVelLo]
 	ld E, A
 
-	bit 0, C ; set z if A pressed
+	bit 0, B ; set z if A pressed
 	jr nz, .noAccel
 	; accelerate
 	LongAdd D,E, 0,BusAccel, D,E ; DE += BusAccel
@@ -65,39 +65,46 @@ UpdateGame::
 	ld [DistanceHi], A
 	; TODO check win cond
 
-	; BusYSubPos += forward speed, then check if it exceeds BusDriftSubLimit
-	; and if so, BusYPos -= 1
+	ld C, BusSteerSpeed
+	ld HL, 0
+	push DE
+	call Multiply ; HL = 128 * speed
+	pop DE ; don't clobber DE
 
-	LongAdd [BusYSubPosHi],[BusYSubPosLo], D,E, D,E ; DE = YSubPos + speed
-
-	ld HL, BusYPos
-
-	ld A, D
-	sub BusDriftSubLimit
-	jr c, .noDrift ; jump if D < drift limit
-	ld D, A ; D -= drift limit
-	dec [HL] ; BusYPos -= 1
-.noDrift
-
-	; save the BusYSubPos
-	ld A, D
-	ld [BusYSubPosHi], A
-	ld A, E
-	ld [BusYSubPosLo], A
-
-	; check for Joy up or down
-	xor A
-	bit 6, C
+	; check for Joy up or down, if found add/sub Steer Speed
+	bit 6, B
 	jr nz, .noUp
-	inc A
-.noUp
-	bit 7, C
-	jr nz, .noDown
-	dec A
-.noDown
 
-	add [HL]
-	ld [HL], A ; BusYPos += delta
+	; YPos.YSubPos -= 128 * speed
+	LongSub [BusYSubPosHi],[BusYSubPosLo], H,L, [BusYSubPosHi],[BusYSubPosLo]
+	ld A, [BusYPos]
+	sbc 0 ; if carry, sub 1
+	ld [BusYPos], A
+	jr .afterSteer
+
+.noUp
+	bit 7, B
+	jr nz, .noDown
+
+	; YSubPos += 128 * speed
+	LongAdd [BusYSubPosHi],[BusYSubPosLo], H,L, [BusYSubPosHi],[BusYSubPosLo]
+	ld A, [BusYPos]
+	adc 0 ; if carry, add 1
+	ld [BusYPos], A
+	jr .afterSteer
+
+.noDown ; drift
+
+	; YSubPos += 8 * speed
+	ld C, BusDriftSpeed
+	ld HL, 0
+	call Multiply ; HL = 8 * speed
+	LongAdd [BusYSubPosHi],[BusYSubPosLo], H,L, [BusYSubPosHi],[BusYSubPosLo]
+	ld A, [BusYPos]
+	adc 0 ; if carry, add 1
+	ld [BusYPos], A
+
+.afterSteer
 
 	ret
 
