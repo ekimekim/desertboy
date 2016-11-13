@@ -1,0 +1,30 @@
+screen:
+top down tiles, scrolling left->right
+18 tiles high:
+	0-2: desert
+	3: roadside
+	4-7: road
+	8: road with dashes every 2nd tile at bottom
+	9: road with dashes every 2nd tile at top
+	10-13: road
+	14: roadside
+	15-17: desert
+
+3x2 tile Bus sprite
+	resting at some x coord, map moves around it
+	maybe around 5 tiles in, say 4.5*8 = 36px
+
+stretch goals:
+	randomize tiles for variety
+	bus stops
+	random cactus
+	slight drift forward/back on x axis for bus sprite
+
+main loop:
+	vblank
+		scroll right
+		if new row exposed, paint it
+		update bus position
+	read input
+	do physics
+	check win/lose conds
