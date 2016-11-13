@@ -29,10 +29,14 @@ Start::
 	ld [LCDControl], A
 
 	; Initialize VRAM
+	call LoadTileData
+	call LoadTileGrid
+	call LoadSpriteData
+	call UpdateGraphics
 
 	; Initialize other settings
 	; Set pallettes
-	ld A, %11100100
+	ld A, %11011000 ; this looks weird, but maps 0->0, 1->1, 2->2, 3->3
 	ld [TileGridPalette], A
 	ld [SpritePaletteTransparent], A
 	ld [SpritePaletteSolid], A
@@ -51,7 +55,7 @@ Start::
 	; enable interrupts, we're ready to go
 	EI
 
-	jp HaltForever # for now, we just let the vblank handler do everything
+	jp HaltForever ; for now, we just let the vblank handler do everything
 
 ; Called upon vblank
 Draw::
@@ -61,6 +65,7 @@ Draw::
 	push HL
 
 	call UpdateGraphics ; this part is vblank-sensitive
+	call UpdateInputs
 	call UpdateGame
 
 	pop HL

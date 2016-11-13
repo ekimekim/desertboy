@@ -1,7 +1,7 @@
 
 # avoid implicit rules for clarity
 .SUFFIXES: .asm .o .gb
-.PHONY: run clean assets scenarios
+.PHONY: run clean tiles bgb
 
 ASMS := $(wildcard *.asm)
 OBJS := $(ASMS:.asm=.o)
@@ -16,6 +16,9 @@ game.gb: $(OBJS)
 
 bgb: game.gb
 	bgb $<
+
+tiles:
+	pngtoasm -o include/tilemap.asm -src tiles -debug red -ignore red
 
 clean:
 	rm *.o *.sym game.gb

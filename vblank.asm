@@ -1,18 +1,55 @@
 
 include "hram.asm"
 include "vram.asm"
-include "macros.asm"
+include "ioregs.asm"
 
 Section "VBlank Drawing Routines", ROM0
 
-
 UpdateGraphics::
 
-	; Calculate how many new rows are exposed as (new scroll / 8) - (old scroll / 8)
-	ld A, SubStepHi
-	ShiftRN A, 3 ; div by 8
-	ld B, ScrollX
-	ShiftRN B, 3 ; div by 8
-	sub B ; A = A - B
+	; Update scroll position, moving the entire screen left
+	ld A, [SubStepHi]
+	ld [ScrollX], A
 
-	; Copy in that many new rows
+	call UpdateBusSprite
+
+	ret
+
+
+UpdateBusSprite::
+	ld HL, SpriteTable
+
+	; B, C = top, bottom Y positions
+	ld A, [BusYPos]
+	add 16
+	ld B, A
+	add 8
+	ld C, A
+
+	; A = leftmost X position
+	ld A, [BusXPos]
+	add 8
+
+REPT 2
+	ld [HL], B ; set Y
+	inc HL
+	ld [HL+], A ; set X
+	inc HL
+	inc HL ; inc to next sprite
+	ld [HL], C ; set Y
+	inc HL
+	ld [HL+], A ; set X
+	inc HL
+	inc HL ; inc to next sprite
+	add 8 ; inc X pos for next column
+ENDR
+	ld [HL], B ; set Y
+	inc HL
+	ld [HL+], A ; set X
+	inc HL
+	inc HL ; inc to next sprite
+	ld [HL], C ; set Y
+	inc HL
+	ld [HL], A ; set X
+
+	ret

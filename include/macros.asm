@@ -35,4 +35,5 @@ ShiftRN: MACRO
 	REPT N
 	srl \1
 	ENDR
+	PURGE N
 	ENDM
