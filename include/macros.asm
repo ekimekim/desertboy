@@ -22,3 +22,17 @@ Copy: MACRO
 	dec B
 	jr nz, .loop\@
 	ENDM
+
+; Shift unsigned \1 to the right \2 times, effectively dividing by 2^N
+ShiftRN: MACRO
+	IF \2 >= 4
+	swap \1
+	and $f0
+	N SET \2 - 4
+	ELSE
+	N SET \2
+	ENDC
+	REPT N
+	srl \1
+	ENDR
+	ENDM
