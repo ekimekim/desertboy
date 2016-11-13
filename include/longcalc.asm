@@ -9,6 +9,7 @@ LongLoad: MACRO
 
 ; Add 16-bit reg pairs or immediates \1\2 and \3\4, putting result in \5\6, which may be the same as either.
 ; Cannot use AF. Clobbers A. Sets or resets carry as per normal add.
+; \1\2 and \5\6 may be indirect immediates.
 LongAdd: MACRO
 	ld A, \2
 	add \4
@@ -19,7 +20,7 @@ LongAdd: MACRO
 	ENDM
 
 ; Subtract 16-bit reg pairs or immediates \1\2 and \3\4, putting result in \5\6, which may be the same as either.
-; Cannot use SF. Clobbers A. Sets or resets carry as per normal subtract.
+; Cannot use AF. Clobbers A. Sets or resets carry as per normal subtract.
 LongSub: MACRO
 	ld A, \2
 	sub \4

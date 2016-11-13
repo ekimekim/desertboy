@@ -11,6 +11,9 @@ BusDrag EQU 1
 ; Extra slow-down offroad, per frame
 BusDragOffroad EQU 5
 
+; Value BusYSubPosHi must reach before moving BusYPos by 1 pixel
+BusDriftSubLimit EQU 12
+
 ; Debugging values
 AR EQU BusAccel - BusDrag
 NAR EQU BusDrag

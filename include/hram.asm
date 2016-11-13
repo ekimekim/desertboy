@@ -10,9 +10,10 @@ DistanceLo EQU $ff83
 BusXPos EQU $ff84
 BusYPos EQU $ff85
 
-; X and Y velocity of the bus
-; X is 8-bit and in pixels
-; Y is 16-bit and in Sub-steps, which as above is 1/256th of a pixel
-BusXVel EQU $ff86
-BusYVelHi EQU $ff87
-BusYVelLo EQU $ff88
+; forward velocity. 16-bit and in Sub-steps, which as above is 1/256th of a pixel
+BusVelHi EQU $ff86
+BusVelLo EQU $ff87
+
+; Used to determine when BusYPos should change due to drift
+BusYSubPosHi EQU $ff88
+BusYSubPosLo EQU $ff89

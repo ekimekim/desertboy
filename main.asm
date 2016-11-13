@@ -65,7 +65,6 @@ Draw::
 	push HL
 
 	call UpdateGraphics ; this part is vblank-sensitive
-	call UpdateInputs
 	call UpdateGame
 
 	pop HL
