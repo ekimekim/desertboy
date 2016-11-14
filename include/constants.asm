@@ -5,6 +5,15 @@ BusAccel EQU 3
 ; Max speed by holding accelerator. Upper byte only, ie. it's in units of 256 substeps.
 BusTopSpeedHi EQU $2
 
+; How many seconds it should take to get a point at top speed
+BusPointTimeSec EQU 3600*8
+; Derived from above, the Distance value required
+BusPointTimeFrames EQU BusPointTimeSec * 60
+BusPointDist256Subs EQU BusPointTimeFrames * BusTopSpeedHi
+BusPointDistance EQU BusPointDist256Subs / 256
+BusPointDistanceHi EQU BusPointDistance / 256
+BusPointDistanceLo EQU BusPointDistance % 256
+
 ; Slow-down on road per frame
 BusDrag EQU 1
 
@@ -31,4 +40,8 @@ PURGE AR, NAR, AO, NAO
 
 PRINTT "Milliseconds to max speed: "
 PRINTV BusTopSpeedHi * 256 * 1000 / ((BusAccel - BusDrag) * 60)
+PRINTT "\n"
+
+PRINTT "Actual time for point at max speed after rounding, in frames: "
+PRINTV BusPointDistance * 256 / BusTopSpeedHi
 PRINTT "\n"

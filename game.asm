@@ -55,8 +55,6 @@ UpdateGame::
 	ld D, 0
 	ld E, 0
 
-	; TODO check lose cond
-
 .afterZeroSpeed
 
 	; save VelY
@@ -75,6 +73,9 @@ UpdateGame::
 	adc 0
 	ld [DistanceHi], A
 	; TODO check win cond
+
+	; check for point
+	cp BusPointDistanceHi - 1 ; TODO UPTO
 
 	ld C, BusSteerSpeed
 	ld HL, 0
