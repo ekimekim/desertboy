@@ -67,4 +67,11 @@ UpdateFadeGraphics::
 	ld A, [FadeProgress]
 	sub 1
 	ld [WindowY], A
+	ld HL, LCDControl
+	jr c, .enableSprites ; carry if FadeProgress is 0
+.disableSprites
+	res 1, [HL]
+	ret
+.enableSprites
+	set 1, [HL]
 	ret
