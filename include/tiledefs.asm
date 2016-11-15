@@ -6,6 +6,7 @@ TileRoad EQU 1
 TileRoadEdge EQU 2
 TileLineBelow EQU 3
 TileLineAbove EQU 4
+TileFill EQU 5
 
 TileBus1 EQU $10
 TileBus2 EQU $20

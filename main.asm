@@ -42,7 +42,7 @@ Start::
 	ld [SpritePaletteSolid], A
 
 	; Set up display
-	ld A, %10010011 ; window off, background and sprites on, use signed tile map
+	ld A, %11110011 ; window on, background and sprites on, use signed tile map, window uses alt tile map
 	ld [LCDControl], A
 
 	; Which interrupts we want: VBlank only

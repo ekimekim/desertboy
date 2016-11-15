@@ -1,6 +1,8 @@
 
 INCLUDE "vram.asm"
+INCLUDE "ioregs.asm"
 INCLUDE "macros.asm"
+INCLUDE "tiledefs.asm"
 
 Section "Tile Assets", ROMX, BANK[1]
 
@@ -12,8 +14,13 @@ TileGridData:
 INCLUDE "tilegrid.asm"
 EndTileGridData:
 
+WindowGridData:
+INCLUDE "windowgrid.asm"
+EndWindowGridData
+
 TileMapDataSize EQU EndTileMapData - TileMapData
 TileGridDataSize EQU EndTileGridData - TileGridData
+WindowGridDataSize EQU EndWindowGridData - WindowGridData
 
 SpriteData:
 ; the bus is the first 6 sprite slots
@@ -53,5 +60,19 @@ LoadTileGrid::
 	ld HL, TileGridData
 	ld DE, TileGrid
 	ld BC, TileGridDataSize
+	LongCopy
+	ret
+
+
+; Copies 32x18 of data to the AltTileGrid, for use in the window
+LoadWindow::
+	xor A
+	ld [WindowY], A
+	ld A, $ff
+	ld [WindowX], A
+
+	ld HL, WindowGridData
+	ld DE, AltTileGrid
+	ld BC, WindowGridDataSize
 	LongCopy
 	ret

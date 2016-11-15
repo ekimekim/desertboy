@@ -6,6 +6,12 @@ include "hram.asm"
 SECTION "Input methods", ROM0
 
 UpdateGame::
+	; if we're in a fade, just update it and return
+	ld A, [FadeProgress]
+	and a ; set z if A == 0
+	jp nz, Fade
+	; Note we do a tail call ret elision here, the above line is a "call & ret".
+
 	call GetInputs
 	ld B, A
 
@@ -163,8 +169,53 @@ GetInputs::
 
 
 Crash::
-	jp HaltForever ; stub for now
+	xor A
+	ld [Points], A ; Points = 0  :(
+	jp Fade
 
 
 Point::
-	jp HaltForever ; stub for now
+	ld A, [Points]
+	add 1
+	daa ; add + daa = BCD add
+	jr nc, .noOverflow
+	ld A, $99 ; saturate at 99
+.noOverflow
+	ld [Points], A
+	jp StartFade
+
+
+StartFade::
+	ld A, 167
+	ld [FadeProgress], A
+	ret
+
+
+Fade::
+	ld A, [FadeProgress]
+	dec A
+	ld [FadeProgress], A
+	jp z, ResetState ; if zero, finish reset
+	; jp above is a call & return
+	ret
+
+
+; reset everything except Points to initial state
+ResetState::
+	xor A
+	ld [SubStepLo], A
+	ld [SubStepHi], A
+	ld [DistanceLo], A
+	ld [DistanceHi], A
+	ld [BusVelHi], A
+	ld [BusVelLo], A
+	ld [BusYSubPosLo], A
+	ld [BusYSubPosHi], A
+
+	ld A, BusXPosInitial
+	ld [BusXPos], A
+
+	ld A, BusYPosInitial
+	ld [BusYPos], A
+
+	ret

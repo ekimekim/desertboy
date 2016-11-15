@@ -1,4 +1,3 @@
-include "tiledefs.asm"
 
 Dt EQU TileDesert
 Eg EQU TileRoadEdge

@@ -17,3 +17,9 @@ BusVelLo EQU $ff87
 ; 16-bit sub-pixel value for BusYPos
 BusYSubPosHi EQU $ff88
 BusYSubPosLo EQU $ff89
+
+; Points is a BCD value from 0 to 99
+Points EQU $ff8a
+
+; When fading, this is how far into the fade we are. Complete when it reaches zero.
+FadeProgress EQU $ff8b

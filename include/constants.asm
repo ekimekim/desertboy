@@ -16,6 +16,9 @@ BusPointDistance EQU BusPointDist256Subs / 256
 BusPointDistanceHi EQU BusPointDistance / 256
 BusPointDistanceLo EQU BusPointDistance % 256
 
+BusXPosInitial EQU 36
+BusYPosInitial EQU 64
+
 ; Slow-down on road per frame
 BusDrag EQU 1
 

@@ -12,6 +12,8 @@ UpdateGraphics::
 	ld [ScrollX], A
 
 	call UpdateBusSprite
+	call UpdateScoreSprite
+	call UpdateFadeGraphics
 
 	ret
 
@@ -52,4 +54,17 @@ ENDR
 	inc HL
 	ld [HL], A ; set X
 
+	ret
+
+
+UpdateScoreSprite::
+	; TODO
+	ret
+
+
+; we fade with a flying window, pre-set to be solid color, x position = fade progress - 1 so it's invisible at 0
+UpdateFadeGraphics::
+	ld A, [FadeProgress]
+	sub 1
+	ld [WindowX], A
 	ret
