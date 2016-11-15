@@ -2,6 +2,7 @@
 include "hram.asm"
 include "vram.asm"
 include "ioregs.asm"
+include "tiledefs.asm"
 
 Section "VBlank Drawing Routines", ROM0
 
@@ -58,7 +59,19 @@ ENDR
 
 
 UpdateScoreSprite::
-	; TODO
+	ld A, [Points]
+
+	ld B, A
+	and $0f
+	add TileDigits
+	ld [SpriteTable + 4*7 + 2], A ; sprite 7 (trailing score digit), field 2 (tile)
+
+	ld A, B
+	swap A
+	and $0f
+	add TileDigits
+	ld [SpriteTable + 4*6 + 2], A ; sprite 6 (leading score digit), field 2 (tile)
+
 	ret
 
 

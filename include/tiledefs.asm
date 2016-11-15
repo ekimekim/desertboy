@@ -14,3 +14,5 @@ TileBus3 EQU $11
 TileBus4 EQU $21
 TileBus5 EQU $12
 TileBus6 EQU $22
+
+TileDigits EQU $30 ; 30-39

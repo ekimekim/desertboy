@@ -23,8 +23,8 @@ TileGridDataSize EQU EndTileGridData - TileGridData
 WindowGridDataSize EQU EndWindowGridData - WindowGridData
 
 SpriteData:
-; the bus is the first 6 sprite slots
 ; sprites are (Y+16, X+8, Tile, flags: priority, y flip, x flip, alt pallete, unused*4)
+; the bus is the first 6 sprite slots
 ; numbers are arranged on screen thus:
 ;   1 3 5
 ;   2 4 6
@@ -34,6 +34,9 @@ db 0, 0, TileBus3, 0
 db 0, 0, TileBus4, 0
 db 0, 0, TileBus5, 0
 db 0, 0, TileBus6, 0
+; these two sprites (6,7) are the score digits
+db 28, 20, TileBlank, 0
+db 28, 28, TileBlank, 0
 EndSpriteData:
 ds 40 * 4 - (EndSpriteData - SpriteData)
 
