@@ -31,6 +31,7 @@ Start::
 	; Initialize VRAM
 	call LoadTileData
 	call LoadTileGrid
+	call LoadWindow
 	call LoadSpriteData
 	call UpdateGraphics
 

@@ -67,9 +67,9 @@ LoadTileGrid::
 ; Copies 32x18 of data to the AltTileGrid, for use in the window
 LoadWindow::
 	xor A
-	ld [WindowY], A
-	ld A, $ff
 	ld [WindowX], A
+	ld A, $ff
+	ld [WindowY], A
 
 	ld HL, WindowGridData
 	ld DE, AltTileGrid

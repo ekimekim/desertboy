@@ -186,7 +186,7 @@ Point::
 
 
 StartFade::
-	ld A, 167
+	ld A, 144
 	ld [FadeProgress], A
 	ret
 

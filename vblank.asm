@@ -66,5 +66,5 @@ UpdateScoreSprite::
 UpdateFadeGraphics::
 	ld A, [FadeProgress]
 	sub 1
-	ld [WindowX], A
+	ld [WindowY], A
 	ret
