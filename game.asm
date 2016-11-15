@@ -72,10 +72,19 @@ UpdateGame::
 	ld A, [DistanceHi]
 	adc 0
 	ld [DistanceHi], A
-	; TODO check win cond
 
 	; check for point
-	cp BusPointDistanceHi - 1 ; TODO UPTO
+	cp BusPointDistanceHi ; set carry if distance < point distance, set zero if distance == point distance
+	jr c, .noPoint
+	jr nz, .point
+	; hi is equal, also check lo
+	ld A, [DistanceLo]
+	cp BusPointDistanceLo ; set carry if distance < point distance
+	jr c, .noPoint
+.point
+	jp Point
+	; Note we do a tail call ret elision here, the above line is a "call & ret".
+.noPoint
 
 	ld C, BusSteerSpeed
 	ld HL, 0
@@ -154,4 +163,8 @@ GetInputs::
 
 
 Crash::
+	jp HaltForever ; stub for now
+
+
+Point::
 	jp HaltForever ; stub for now
