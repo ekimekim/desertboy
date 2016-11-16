@@ -6,9 +6,9 @@ BusAccel EQU 3
 BusTopSpeedHi EQU $2
 
 ; How many seconds it should take to get a point at top speed
-; BusPointTimeSec EQU 3600*8 ; real value
+BusPointTimeSec EQU 3600*8 ; real value
 ; BusPointTimeSec EQU 10 ; for testing
-BusPointTimeSec EQU 120 ; for showing off
+; BusPointTimeSec EQU 120 ; for showing off
 
 ; Derived from above, the Distance value required
 BusPointTimeFrames EQU BusPointTimeSec * 60
